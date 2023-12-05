@@ -1,1 +1,1 @@
-# 197a-Vignette-Group12
+# Binary Classification in R and application to classify patients with diabetes

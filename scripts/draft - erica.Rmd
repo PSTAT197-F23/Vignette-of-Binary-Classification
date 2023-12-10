@@ -182,7 +182,7 @@ set.seed(3435)
 db_split <- initial_split(db, prop = 0.80, strata = "Outcome")
 db_train <- training(db_split)
 db_test <- testing(db_split)
-db_fold <- vfold_cv(db_train, v = 4)
+db_fold <- vfold_cv(db_train, v = 6)
 
 # Recipe without step_upsample
 db_recipe <- recipe(Outcome ~ ., data = db_train) %>%
@@ -190,13 +190,11 @@ db_recipe <- recipe(Outcome ~ ., data = db_train) %>%
   step_normalize(all_predictors())
 
 # Prepare the recipe
-db_recipe_prep <- prep(db_recipe)
+prep(db_recipe)%>% bake(new_data = db_train) %>% 
+  group_by(Outcome) %>% 
+  summarise(count = n())
 
-# Apply the recipe to the training data
-db_train_preprocessed <- bake(db_recipe_prep, new_data = db_train)
-
-# Perform oversampling using ROSE
-db_train_upsampled <- ROSE(Outcome ~ ., data = db_train_preprocessed, seed = 3435, N = nrow(db_train_preprocessed) * 0.5)$data
+ 
 
 # Define the k-NN model
 knn_model <- nearest_neighbor(neighbors = tune()) %>% 
@@ -227,9 +225,88 @@ best_knn_db <- select_best(
 
 ```
 
+
+```{r}
+best_knn_wf <- finalize_workflow(db_knn_wflow, best_knn_db)
+knn_fit <- fit(best_knn_wf, data = db_train)
+
+# Extract predictions
+knn_preds <- augment(knn_fit, new_data = db_train)
+
+# Calculate ROC AUC directly using pROC
+roc_curve <- roc(knn_preds$Outcome, knn_preds$.pred_0)
+roc_auc_value <- auc(roc_curve)
+print(roc_auc_value)
+
+# Confusion Matrix
+conf_matrix <- knn_preds %>%
+  conf_mat(truth = Outcome, estimate = .pred_class)
+
+# Plot Confusion Matrix
+conf_matrix %>% autoplot(type = 'heatmap') +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```
+```{r}
+autoplot(db_tune_knn) + theme_minimal()
+```
+
+
 ```{r}
 
+```
 
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+install.packages("pROC")
+library(pROC)
+
+```
+
+```{r}
+# Apply the recipe to the training data
+db_train_preprocessed <- bake(db_recipe_prep, new_data = db_train)
+
+# Perform oversampling using ROSE
+db_train_upsampled <- ROSE(Outcome ~ ., data = db_train_preprocessed, seed = 3435, N = nrow(db_train_preprocessed) * 0.5)$data
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
 
 ```
 
@@ -261,6 +338,41 @@ best_knn_db <- select_best(
 
 ```
 
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
 ```{r}
 
 ```

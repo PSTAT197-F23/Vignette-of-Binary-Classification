@@ -250,10 +250,72 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 ```{r}
 autoplot(db_tune_knn) + theme_minimal()
 ```
-
+##Logistic Regression
 
 ```{r}
+# Logistic regression
+log_reg <- logistic_reg() %>% 
+  set_engine("glm") %>% 
+  set_mode("classification")
 
+db_log_wflow <- workflow() %>% 
+  add_model(log_reg) %>% 
+  add_recipe(db_recipe)
+
+# Tune the model
+db_tune_reg <- tune_grid(
+  object = db_log_wflow, 
+  resamples = db_fold
+)
+
+# Fit the model
+log_fit <- fit(db_log_wflow, db_train)
+
+# Extract predictions
+log_preds <- augment(log_fit, new_data = db_train)
+
+# Calculate ROC AUC directly using pROC
+roc_curve <- roc(log_preds$Outcome, log_preds$.pred_0)
+roc_auc_value <- auc(roc_curve)
+print(roc_auc_value)
+
+# Confusion Matrix
+conf_matrix <- log_preds %>%
+  conf_mat(truth = Outcome, estimate = .pred_class)
+
+# Plot Confusion Matrix
+conf_matrix %>% autoplot(type = 'heatmap') +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# Show best tuning parameters
+show_best(db_tune_reg, n = 1)
+
+```
+### Random Forest 
+```{r eval=FALSE}
+rf_class_model <- rand_forest(mtry = tune(), 
+                              trees = tune(), 
+                              min_n = tune()) %>%
+  set_engine("ranger", importance = "impurity") %>% 
+  set_mode("classification")
+
+rf_class_wf <- workflow() %>% 
+  add_model(rf_class_model) %>% 
+  add_recipe(bank_recipe)
+
+param_grid <- grid_regular(
+  mtry(range = c(1, 6)),
+  trees(range = c(200, 600)),
+  min_n(range = c(10, 20)),
+  levels = 5
+)
+
+bank_tune_rf <- tune_grid(
+  object = rf_class_wf, 
+  resamples = bank_fold, 
+  grid = param_grid)
+
+save(bank_tune_rf, file = 'bank_tune_rf.rda')
 ```
 
 ```{r}

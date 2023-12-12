@@ -409,20 +409,91 @@ autoplot(tune_bt_class) + theme_minimal()
 show_best(tune_bt_class, n = 1)
 ```
 
-
+```{r}
+best_bt_class <- select_best(tune_bt_class)
+```
 
 ```{r}
-install.packages("ranger", dependencies = TRUE, repos = "https://cran.rstudio.com/")
+bt_mode_fit <- finalize_workflow(bt_class_wf, best_bt_class)
+bt_mode_fit <- fit(bt_mode_fit, db_train)
 
+
+bt_mode_fit %>% extract_fit_parsnip() %>% 
+  vip() +
+  theme_minimal()
 
 ```
 
 ```{r}
+library(pROC)
 
+# Assuming bt_mode_fit is the finalized and fitted model
+# Replace "Outcome" and ".pred_0" with your actual column names
+
+# Extract predicted probabilities and true outcomes
+predictions <- augment(bt_mode_fit, new_data = db_train)
+roc_curve <- roc(predictions$Outcome, predictions$.pred_0)
+
+# Calculate AUC
+roc_auc_value <- auc(roc_curve)
+
+# Print ROC AUC value
+print(roc_auc_value)
+
+# Plot ROC curve
+plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
+
+# Add AUC value to the plot
+text(0.7, 0.2, paste("AUC =", round(roc_auc_value, 3)), col = "blue", cex = 1.2)
+
+```
+
+
+##TEST FIT
+
+
+```{r}
+library(pROC)
+library(yardstick)
+
+# Assuming knn_fit, log_fit, and bt_mode_fit are your fitted models
+# Replace "Outcome" and ".pred_0" with your actual column names
+
+# KNN
+knn_predictions <- augment(knn_fit, new_data = db_test)
+knn_roc_curve <- roc(knn_predictions$Outcome, knn_predictions$.pred_0)
+knn_auc_value <- auc(knn_roc_curve)
+
+# Logistic Regression
+log_predictions <- augment(log_fit, new_data = db_test)
+log_accuracy <- accuracy(log_predictions, truth = Outcome, estimate = .pred_class)
+log_conf_matrix <- conf_mat(log_predictions, truth = Outcome, estimate = .pred_class)
+
+# Boosted Trees
+bt_predictions <- augment(bt_mode_fit, new_data = db_test)
+bt_roc_curve <- roc(bt_predictions$Outcome, bt_predictions$.pred_0)
+bt_auc_value <- auc(bt_roc_curve)
+bt_conf_matrix <- conf_mat(bt_predictions, truth = Outcome, estimate = .pred_class)
+
+# Print and plot results
+print(paste("KNN AUC:", knn_auc_value))
+print("Logistic Regression Accuracy:")
+print(log_accuracy)
+print("Logistic Regression Confusion Matrix:")
+print(log_conf_matrix)
+print(paste("Boosted Trees AUC:", bt_auc_value))
+print("Boosted Trees Confusion Matrix:")
+print(bt_conf_matrix)
+
+# Plot ROC curves
+plot(knn_roc_curve, main = "KNN ROC Curve", col = "blue", lwd = 2)
+plot(bt_roc_curve, main = "Boosted Trees ROC Curve", col = "green", lwd = 2)
 
 ```
 
 ```{r}
+print(bt_mode_fit$predict)
+print(bt_mode_fit$.pred_0)
 
 ```
 

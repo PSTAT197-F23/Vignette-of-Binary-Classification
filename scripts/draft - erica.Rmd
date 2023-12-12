@@ -451,7 +451,6 @@ text(0.7, 0.2, paste("AUC =", round(roc_auc_value, 3)), col = "blue", cex = 1.2)
 
 ##TEST FIT
 
-
 ```{r}
 library(pROC)
 library(yardstick)
@@ -491,11 +490,39 @@ plot(bt_roc_curve, main = "Boosted Trees ROC Curve", col = "green", lwd = 2)
 
 ```
 
+### Final Fit
+
 ```{r}
-print(bt_mode_fit$predict)
-print(bt_mode_fit$.pred_0)
+library(yardstick)
+library(broom)
+
+final_final_fit <- fit(bt_mode_fit, data = db_test)
+
+# Compute ROC AUC
+roc_auc_result <- augment(final_final_fit, new_data = db_test) %>%
+  roc_auc(truth = Outcome, .pred_0)
+
+# Print ROC AUC
+print(roc_auc_result)
+
+# Compute and plot confusion matrix
+conf_mat_result <- augment(final_final_fit, new_data = db_test) %>%
+  conf_mat(truth = Outcome, .pred_class) %>%
+  autoplot(type = 'heatmap')
+
+# Print confusion matrix
+print(conf_mat_result)
 
 ```
+
+```{r}
+final_final_fit <- fit(bank_rf_fit , data = bank_test)
+augment(final_final_fit, new_data = bank_test) %>%
+  roc_auc(truth = Exited, estimate = .pred_0)
+augment(final_final_fit, new_data = bank_test) %>%
+  conf_mat(truth = Exited, estimate = .pred_class)%>%autoplot(type='heatmap')
+```
+
 
 ```{r}
 

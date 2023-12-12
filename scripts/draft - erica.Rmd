@@ -293,6 +293,7 @@ show_best(db_tune_reg, n = 1)
 ```
 ### Random Forest 
 ```{r eval=FALSE}
+library(tidyverse)
 rf_class_model <- rand_forest(mtry = tune(), 
                               trees = tune(), 
                               min_n = tune()) %>%
@@ -301,50 +302,123 @@ rf_class_model <- rand_forest(mtry = tune(),
 
 rf_class_wf <- workflow() %>% 
   add_model(rf_class_model) %>% 
-  add_recipe(bank_recipe)
+  add_recipe(db_recipe)
 
 param_grid <- grid_regular(
-  mtry(range = c(1, 6)),
+  mtry(range = c(1, 4)),
   trees(range = c(200, 600)),
   min_n(range = c(10, 20)),
-  levels = 5
+  levels = 4
 )
 
-bank_tune_rf <- tune_grid(
+db_tune_rf <- tune_grid(
   object = rf_class_wf, 
-  resamples = bank_fold, 
+  resamples = db_fold, 
   grid = param_grid)
 
 save(bank_tune_rf, file = 'bank_tune_rf.rda')
-```
 
-```{r}
 
 ```
 
 ```{r}
 
+library(randomForest)
+
+# Define the random forest model
+rf_class_model <- rand_forest(mtry = tune(), 
+                              trees = tune(), 
+                              min_n = tune()) %>%
+  set_engine("randomForest", importance = "impurity") %>% 
+  set_mode("classification")
+
+# Create a workflow
+rf_class_wf <- workflow() %>% 
+  add_model(rf_class_model) %>% 
+  add_recipe(db_recipe)
+
+# Define the parameter grid
+param_grid <- grid_regular(
+  mtry(range = c(1, 4)),
+  trees(range = c(200, 600)),
+  min_n(range = c(10, 20)),
+  levels = 4
+)
+
+# Tune the model
+db_tune_rf <- tune_grid(
+  object = rf_class_wf, 
+  resamples = db_fold, 
+  grid = param_grid
+)
+
+# Save the result
+save(db_tune_rf, file = 'db_tune_rf.rda')
+
+```
+
+
+```{r}
+load("db_tune_rf.rda")
 ```
 
 ```{r}
-install.packages("pROC")
-library(pROC)
+autoplot(db_tune_rf) + theme_minimal()
+```
+
+```{r}
+show_best(db_tune_rf, n = 1)
+
+```
+##Boosted Tree Model
+```{r}
+bt_class_spec <- boost_tree(mtry = tune(), 
+                           trees = tune(), 
+                           learn_rate = tune()) %>%
+  set_engine("xgboost") %>% 
+  set_mode("classification")
+
+bt_class_wf <- workflow() %>% 
+  add_model(bt_class_spec) %>% 
+  add_recipe(db_recipe)
+```
+
+```{r}
+bt_grid <- grid_regular(mtry(range = c(1, 6)), 
+                        trees(range = c(200, 600)),
+                        learn_rate(range = c(-10, -1)),
+                        levels = 5)
+bt_grid
+```
+
+```{r eval=FALSE}
+tune_bt_class <- tune_grid(
+  bt_class_wf,
+  resamples = db_fold,
+  grid = bt_grid
+)
+save(tune_bt_class, file = "tune_bt_class.rda")
+```
+
+```{r}
+load("tune_bt_class.rda")
+autoplot(tune_bt_class) + theme_minimal()
+```
+
+```{r}
+show_best(tune_bt_class, n = 1)
+```
+
+
+
+```{r}
+install.packages("ranger", dependencies = TRUE, repos = "https://cran.rstudio.com/")
+
 
 ```
 
 ```{r}
-# Apply the recipe to the training data
-db_train_preprocessed <- bake(db_recipe_prep, new_data = db_train)
 
-# Perform oversampling using ROSE
-db_train_upsampled <- ROSE(Outcome ~ ., data = db_train_preprocessed, seed = 3435, N = nrow(db_train_preprocessed) * 0.5)$data
-```
-
-```{r}
-
-```
-
-```{r}
 
 ```
 

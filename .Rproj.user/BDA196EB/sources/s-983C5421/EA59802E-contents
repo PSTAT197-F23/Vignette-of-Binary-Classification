@@ -180,7 +180,6 @@ The prep() function is then used to prepare the recipe object, and bake() is use
 
 
 
-
 #Knn
 ```{r}
 # Define the k-NN model

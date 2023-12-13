@@ -1,0 +1,5 @@
+"0","#bank_df$Exited_num <- as.numeric(bank_df$Exited) # Convert Exited to numeric variable"
+"0","diabetes_numeric <- db %>% "
+"0","  select_if(is.numeric) # Select only numeric columns"
+"0","cor_matrix <- cor(diabetes_numeric) # Compute correlation matrix"
+"0","corrplot(cor_matrix, type = ""lower"", diag = FALSE) # Plot correlation matrix"

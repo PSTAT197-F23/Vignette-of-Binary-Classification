@@ -1,0 +1,2 @@
+"0","db <- read.csv(""~/Downloads/diabetes.csv"")"
+"0","db"

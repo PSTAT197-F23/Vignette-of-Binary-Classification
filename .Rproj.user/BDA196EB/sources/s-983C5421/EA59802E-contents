@@ -32,6 +32,7 @@ library(discrim)
 library(klaR)
 library(plotly)
 library(xgboost)
+library(reticulate)
 tidymodels_prefer()
 })
 ```
@@ -277,8 +278,6 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 show_best(db_tune_reg, n = 1)
 
 ```
-### Random Forest 
-
 
 
 ##Boosted Tree Model
@@ -429,10 +428,6 @@ print(conf_mat_result)
 ```
 
 
-
-```{r}
-
-```
 
 ```{r}
 

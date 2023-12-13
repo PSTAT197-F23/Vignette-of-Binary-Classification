@@ -3,24 +3,24 @@
     "path": "~/Documents/GitHub/197a-Vignette-Group12/scripts/vignette-script.R",
     "project_path": "scripts/vignette-script.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "2348447423",
     "contents": "",
     "dirty": false,
     "created": 1702462410994.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "295,22",
-        "scrollLine": "290"
+        "cursorPosition": "312,1",
+        "scrollLine": "297"
     },
     "folds": "",
-    "lastKnownWriteTime": 1702495101,
+    "lastKnownWriteTime": 1702499246,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1702495101253,
+    "last_content_update": 1702499246066,
     "read_only": false,
     "read_only_alternatives": []
 }

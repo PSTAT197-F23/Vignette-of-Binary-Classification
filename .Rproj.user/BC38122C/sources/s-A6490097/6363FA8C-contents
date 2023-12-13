@@ -252,56 +252,65 @@ print("Boosted Trees Confusion Matrix:")
 print(bt_conf_matrix)
 
 
-# Python code
+# all Python code below
 library(reticulate)
+root_dir <- rprojroot::find_rstudio_root_file()
+scripts_dir <- file.path(root_dir, "scripts/python")
+setwd(scripts_dir)
 
+# Run models with default parameters 
+system('python3 Chris_Pt1.py')
 
-# Focused on the algorithms not covered Random Forest and XGBoost 
+# Get more accurate metrics using k-fold Cross Validation
+system('python3 Chris_Pt2.py')
+
+# find best hyperparameters for each model using GridSearch Cross Validation
+system('python3 Chris_Pt3.py') # This takes a while!
+
+# Random Forest, Gradient Boosting Decision Trees, XGBoost 
 
 # load packages
-```{python}
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import LogisticRegression
-from xgboost import XGBClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, roc_auc_score
-import matplotlib.pyplot as plt
+
+#import pandas as pd
+#from sklearn.model_selection import train_test_split
+#from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+#from sklearn.neighbors import KNeighborsClassifier
+#from sklearn.linear_model import LogisticRegression
+#from xgboost import XGBClassifier
+#from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, roc_auc_score
+#import matplotlib.pyplot as plt
 
 # Load the dataset
-db = pd.read_csv("../../data/diabetes.csv")
+#db = pd.read_csv("../../data/diabetes.csv")
 
 # Process data
 # Remove rows where any column except 'Pregnancies' or 'Outcome' is 0
-cols_to_check = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
-db_filtered = db[(db[cols_to_check] != 0).all(axis=1)]
+#cols_to_check = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
+#db_filtered = db[(db[cols_to_check] != 0).all(axis=1)]
 
 # Separate features and target variable
-X = db_filtered.drop('Outcome', axis=1)
-y = db_filtered['Outcome']
+#X = db_filtered.drop('Outcome', axis=1)
+#y = db_filtered['Outcome']
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 
 # Train Random Forest Classifier
-rf_model = RandomForestClassifier(random_state=0)
-rf_model.fit(X_train, y_train)
-compute_metrics_and_plot(rf_model, X_test, y_test, "Random Forest","RanF")
+#rf_model = RandomForestClassifier(random_state=0)
+#rf_model.fit(X_train, y_train)
+#compute_metrics_and_plot(rf_model, X_test, y_test, "Random Forest","RanF")
 
 # Train Gradient Boosting Decision Trees (GBDT)
-gbdt_model = GradientBoostingClassifier(random_state=0)
-gbdt_model.fit(X_train, y_train)
-compute_metrics_and_plot(gbdt_model, X_test, y_test, "Gradient Boosted Trees","GBDT")
+#gbdt_model = GradientBoostingClassifier(random_state=0)
+#gbdt_model.fit(X_train, y_train)
+#compute_metrics_and_plot(gbdt_model, X_test, y_test, "Gradient Boosted Trees","GBDT")
 
 
 # Train XGBoost Classifier
-xgb_model = XGBClassifier(random_state=0,learning_rate=0.3)
-xgb_model.fit(X_train, y_train)
-compute_metrics_and_plot(xgb_model, X_test, y_test, "XGBoost","XGB")
+#xgb_model = XGBClassifier(random_state=0,learning_rate=0.3)
+#xgb_model.fit(X_train, y_train)
+#compute_metrics_and_plot(xgb_model, X_test, y_test, "XGBoost","XGB")
 
 
-
-```
 

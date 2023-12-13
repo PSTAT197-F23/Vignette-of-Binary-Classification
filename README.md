@@ -8,7 +8,7 @@ For our vignette class project, we decided to choose the topic Nonlinear Binary 
 
 The example data we used to carry out these different binary classification algorithms sourced from the National Institute of Diabetes and Digestive Kidney Disease. This dataset is patients' data of females at least twenty one years old and of Pima Indian heritage. There are eight independent variables: Pregnancies, Glucose Concentration, Blood Pressure, Skin Thickness, Insulin Levels, BMI (Body Mass Index), Diabetes Pedigree Function, and Age. The response variable is Outcome where 1 means Yes diabetes and 0 is No diabetes. Our primary objective is to develop a binary classification model that accurately predicts whether a female of Pima Indian heritage who is at least 21 years old has diabetes or not. 
 
-We then compare the different binary classification algorithms and choose the final model based on performance metrics such as accuracy, precision, recall, and F1 score. 
+We then compare the different binary classification algorithms and choose the final model based on performance metrics such as accuracy, precision, recall, and F1 score. For the Logistic Regression, the accuracy was 0.7722, the precision was 0.6957, the recall was 0.5926, and the F1 score was 0.6400. For the Random Forest, the accuracy was 0.7848, the precision was 0.7083, the recall was 0.6296, and the F1-score was 0.6667. For the K-Nearest Neighbors, the accuracy was 0.7089, the precision was 0.5769, the recall was 0.5556, and the F1-score was 0.5660. For the XGBoost, the accuracy was 0.7468, the precision was 0.6400, the recall was 0.5926, and the F1-score was 0.6154.
 
 
 Repository contents:

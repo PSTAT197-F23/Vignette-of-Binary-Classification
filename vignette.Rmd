@@ -13,7 +13,10 @@ Binary Classification Vignette
 
 For the purpose of this vignette, we will use data from the National Institute of Diabetes and Digestive Kidney Disease.
 
-Activity: ...
+Activity: Creating different models using binary classification algorithms 
+
+We will fit multiple models and compute basic classification accuracy measures. 
+
 Open a new RScript and copy-paste the chunk below to load the data
 ```{r}
 

@@ -30,6 +30,12 @@ Precision: 0.5769
 Recall: 0.5556
 F1-score: 0.5660
 
+Gradient Boosted Trees Metrics:
+Accuracy: 0.7722
+Precision: 0.7059
+Recall: 0.4800
+F1-score: 0.5714
+
 XGBoost Metrics:
 Accuracy: 0.7468
 Precision: 0.6400

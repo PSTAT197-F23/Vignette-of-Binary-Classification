@@ -71,6 +71,10 @@ db_test <- testing(db_split)
 db_fold <- vfold_cv(db_train,v=4)
 ```
 
+We will use the package recipes for the Logistic Regression, K-Nearest Neighbors, and Boosted Tree models. We will also use the tune_grid() function to do the hyperparameter tuning for these models as well. 
+
+The main purpose of a recipe is to define a consistent and reproducible set of data preprocessing steps. 
+
 Here we will use the step_dummy() and prep() functions to set up the training model. 
 The step_dummy() function is used to convert all nominal variables into dummy variables. The step_normalize() function is used to scale all variables to have a mean of zero and standard deviation of one. 
 
@@ -98,6 +102,7 @@ db_recipe <- recipe(Outcome ~ ., data = db_train ) %>%
 Binary Classification Algorithm #1 
 Logistic Regression
 
+We will use the logistic_reg() function to generate the specification of the logistic regression model before fitting.
 ```{r}
 # Logistic regression
 log_reg <- logistic_reg() %>% 
@@ -184,6 +189,7 @@ show_best(db_tune_reg, n = 1)
 Binary Classification Algorithm #2
 K-Nearest Neighbors
 
+We will use the nearest_neighbor() function to generate the specification of the K-Nearest Neighbors model.
 ```{r}
 # Recipe without step_upsample
 db_recipe <- recipe(Outcome ~ ., data = db_train) %>%

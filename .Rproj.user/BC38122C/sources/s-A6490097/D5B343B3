@@ -1,19 +1,17 @@
 {
-    "id": "614FDD94",
-    "path": "~/Documents/GitHub/197a-Vignette-Group12/scripts/python/Chris_Pt1.py",
-    "project_path": "scripts/python/Chris_Pt1.py",
+    "id": "D5B343B3",
+    "path": "~/Documents/GitHub/197a-Vignette-Group12/scripts/python/Chris_Pt2.py",
+    "project_path": "scripts/python/Chris_Pt2.py",
     "type": "python",
-    "hash": "2294045597",
+    "hash": "2724149824",
     "contents": "",
     "dirty": false,
-    "created": 1702492518016.0,
+    "created": 1702494596110.0,
     "source_on_save": false,
-    "relative_order": 3,
+    "relative_order": 5,
     "properties": {
         "source_window_id": "",
-        "Source": "Source",
-        "cursorPosition": "48,35",
-        "scrollLine": "50"
+        "Source": "Source"
     },
     "folds": "",
     "lastKnownWriteTime": 1702491682,

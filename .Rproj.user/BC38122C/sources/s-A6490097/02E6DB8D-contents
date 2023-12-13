@@ -178,7 +178,7 @@ show_best(db_tune_reg, n = 1)
 
 
 
-Binary Classification Algorithm #3
+Binary Classification Algorithm #2
 K-Nearest Neighbors
 
 ```{r}
@@ -249,7 +249,7 @@ autoplot(db_tune_knn) + theme_minimal()
 ```
 
 
-Binary Classification Algorithm #5
+Binary Classification Algorithm #3
 Boosted Tree Model
 ```{r}
 bt_class_spec <- boost_tree(mtry = tune(), 
@@ -311,13 +311,12 @@ print(bt_conf_matrix)
 ```
 
 
-Next we will use Python to create the models for the Random Forest and XGBoost, while also creating models for the algorithms already used above.
+Next we will use Python to create the models for the Random Forest, Gradient Boosting Decision Trees, and XGBoost, while also creating models for the algorithms already used above.
 
 In order to run python code blocks in R we will use the package called reticulate.
 ```{r}
 library(reticulate)
 ```
-
 
 
 Prequisites
@@ -355,13 +354,17 @@ y = db_filtered['Outcome']
 
 
 
-
 We will then do data partitioning and split the data into training and testing sets. 
 ```{python}
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 ```
 
+
+Now we can train the models using the functions
+RandomForestClassifier()
+GradientBoostingClassifier()
+XGBClassifier()
 ```{python}
 # Train Random Forest Classifier
 rf_model = RandomForestClassifier(random_state=0)

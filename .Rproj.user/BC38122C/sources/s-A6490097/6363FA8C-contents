@@ -40,11 +40,6 @@ tidymodels_prefer()
 db <- read_csv("data/diabetes.csv")
 
 ##Data Partitioning
-#When data partitioning, we split the data where the training set is used to train the model and the test set is used to evaluate the performance of the model. Partitions are computed at random. 
-
-#First we will do cross-validation and data splitting.  
-#We then partition the diabetes data into training and test sets.
-
 set.seed(3435)
 db_split <- initial_split(db, prop = 0.80,
                           strata = "Outcome")
@@ -118,7 +113,7 @@ log_predictions <- augment(log_fit, new_data = db_test)
 log_accuracy <- accuracy(log_predictions, truth = Outcome, estimate = .pred_class)
 log_conf_matrix <- conf_mat(log_predictions, truth = Outcome, estimate = .pred_class)
 
-# We will then use the predictions and the observed classes to create a Confusion Matrix table.
+
 # Calculate ROC AUC directly using pROC
 roc_curve <- roc(log_preds$Outcome, log_preds$.pred_0)
 roc_auc_value <- auc(roc_curve)
@@ -134,10 +129,6 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 
 # Show best tuning parameters
 show_best(db_tune_reg, n = 1)
-
-
-#Binary Classification Algorithm #2
-#Random Forest
 
 
 #Binary Classification Algorithm #3
@@ -207,10 +198,6 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 autoplot(db_tune_knn) + theme_minimal()
 
 
-#Binary Classification Algorithm #4
-#XGBoost
-
-
 
 #Binary Classification Algorithm #5
 #Boosted Tree Model
@@ -264,4 +251,57 @@ print(paste("Boosted Trees AUC:", bt_auc_value))
 print("Boosted Trees Confusion Matrix:")
 print(bt_conf_matrix)
 
+
+# Python code
+library(reticulate)
+
+
+# Focused on the algorithms not covered Random Forest and XGBoost 
+
+# load packages
+```{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# Load the dataset
+db = pd.read_csv("../../data/diabetes.csv")
+
+# Process data
+# Remove rows where any column except 'Pregnancies' or 'Outcome' is 0
+cols_to_check = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
+db_filtered = db[(db[cols_to_check] != 0).all(axis=1)]
+
+# Separate features and target variable
+X = db_filtered.drop('Outcome', axis=1)
+y = db_filtered['Outcome']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+
+# Train Random Forest Classifier
+rf_model = RandomForestClassifier(random_state=0)
+rf_model.fit(X_train, y_train)
+compute_metrics_and_plot(rf_model, X_test, y_test, "Random Forest","RanF")
+
+# Train Gradient Boosting Decision Trees (GBDT)
+gbdt_model = GradientBoostingClassifier(random_state=0)
+gbdt_model.fit(X_train, y_train)
+compute_metrics_and_plot(gbdt_model, X_test, y_test, "Gradient Boosted Trees","GBDT")
+
+
+# Train XGBoost Classifier
+xgb_model = XGBClassifier(random_state=0,learning_rate=0.3)
+xgb_model.fit(X_train, y_train)
+compute_metrics_and_plot(xgb_model, X_test, y_test, "XGBoost","XGB")
+
+
+
+```
 

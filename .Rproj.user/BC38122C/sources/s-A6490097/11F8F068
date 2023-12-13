@@ -3,7 +3,7 @@
     "path": "~/Documents/GitHub/197a-Vignette-Group12/scripts/draft - erica.Rmd",
     "project_path": "scripts/draft - erica.Rmd",
     "type": "r_markdown",
-    "hash": "3692500230",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1702436886670.0,
@@ -13,14 +13,14 @@
         "source_window_id": "",
         "Source": "Source",
         "cursorPosition": "474,0",
-        "scrollLine": "509"
+        "scrollLine": "254"
     },
     "folds": "",
-    "lastKnownWriteTime": 1702494206,
+    "lastKnownWriteTime": 1702495262,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1702494206,
+    "last_content_update": 1702495262,
     "read_only": false,
     "read_only_alternatives": []
 }

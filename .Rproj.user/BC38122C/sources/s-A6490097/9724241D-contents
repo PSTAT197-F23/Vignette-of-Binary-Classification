@@ -73,19 +73,20 @@ Recall: 0.5600
 F1-score: 0.6087
 Best parameters for Random Forest: {'max_depth': 6}
 
+
 Tuned GBDT Metrics:
 Accuracy: 0.7975
 Precision: 0.7647
 Recall: 0.5200
 F1-score: 0.6190
-Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}
+
 
 Tuned KNN Metrics:
 Accuracy: 0.7722
 Precision: 0.6842
 Recall: 0.5200
 F1-score: 0.5909
-Best parameters for XGBoost: {'learning_rate': 0.1, 'max_depth': 6}
+Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}
 
 
 
@@ -94,7 +95,6 @@ Accuracy: 0.8101
 Precision: 0.7273
 Recall: 0.6400
 F1-score: 0.6809
-Best parameters for XGBoost: learning_rate=0.01, lambda=0.3
 
 
 
@@ -103,7 +103,6 @@ Accuracy: 0.8101
 Precision: 0.7273
 Recall: 0.6400
 F1-score: 0.6809
-Best parameters for XGBoost: learning_rate=0.01, lambda=0.3
 
 It appears that XGBoost with the listed parameters above is the most optimal classifier for the diabetes dataset.
 

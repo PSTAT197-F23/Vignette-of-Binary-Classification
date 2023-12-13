@@ -252,7 +252,7 @@ print("Boosted Trees Confusion Matrix:")
 print(bt_conf_matrix)
 
 
-# all Python code below
+# all Python code below is commented out allow R Script to have no errors 
 library(reticulate)
 root_dir <- rprojroot::find_rstudio_root_file()
 scripts_dir <- file.path(root_dir, "scripts/python")
@@ -296,6 +296,8 @@ system('python3 Chris_Pt3.py') # This takes a while!
 #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 
+### Default Hyperparameters
+
 # Train Random Forest Classifier
 #rf_model = RandomForestClassifier(random_state=0)
 #rf_model.fit(X_train, y_train)
@@ -311,6 +313,61 @@ system('python3 Chris_Pt3.py') # This takes a while!
 #xgb_model = XGBClassifier(random_state=0,learning_rate=0.3)
 #xgb_model.fit(X_train, y_train)
 #compute_metrics_and_plot(xgb_model, X_test, y_test, "XGBoost","XGB")
+
+
+### Accuracy from 5-fold Cross Validation
+
+# Train Random Forest Classifier
+#rf_model = RandomForestClassifier(random_state=0)
+#cv_scores = cross_val_score(rf_model, X, y, cv=5, scoring='accuracy')
+#print(f"Random Forest 5-Fold CV Accuracies:", cv_scores)
+#print("Mean Accuracy:", cv_scores.mean(),'\n')
+
+# Train Gradient Boosting Decision Trees (GBDT)
+#gbdt_model = GradientBoostingClassifier(random_state=0)
+#cv_scores = cross_val_score(lr_model, X, y, cv=5, scoring='accuracy')
+#print(f"GBDT 5-Fold CV Accuracies:", cv_scores)
+#print("Mean Accuracy:", cv_scores.mean(),'\n')
+
+
+# Train XGBoost Classifier
+#xgb_model = XGBClassifier(random_state=0)
+#cv_scores = cross_val_score(xgb_model, X, y, cv=5, scoring='accuracy')
+#print(f"XGBoost 5-Fold CV Accuracies:", cv_scores)
+#print("Mean Accuracy:", cv_scores.mean(),'\n')
+
+
+### Using GridSearch Cross Validation of models
+
+
+# GridSearchCV for Random Forest
+#rf_params = {
+#  'max_depth': [3, 4, 5, 6]}
+#rf_grid = GridSearchCV(RandomForestClassifier(random_state=0), param_grid=rf_params, cv=5)
+#rf_grid.fit(X_train, y_train)
+#best_rf = rf_grid.best_estimator_
+#print("Best parameters for Random Forest:", rf_grid.best_params_)
+#compute_metrics_and_plot(best_rf, X_test, y_test, "Tuned Random Forest","RanF")
+
+# GridSearchCV for Gradient Boosting Decision Trees (GBDT)
+#gbdt_params = {
+#  'learning_rate': [0.01, 0.1, 0.2, 0.3],
+#  'max_depth': [3, 4, 5, 6]}
+#gbdt_grid = GridSearchCV(GradientBoostingClassifier(random_state=0), param_grid=gbdt_params, cv=5)
+#gbdt_grid.fit(X_train, y_train)
+#best_gbdt = gbdt_grid.best_estimator_
+#print("Best parameters for GBDT:", gbdt_grid.best_params_)
+#compute_metrics_and_plot(best_gbdt, X_test, y_test, "Tuned Gradient Boost Trees","GBDT")
+
+# GridSearchCV for XGBoost Classifier
+#xgb_params = {
+#  'max_depth': [3, 4, 5, 6]}
+#xgb_grid = GridSearchCV(XGBClassifier(random_state=0, learning_rate=0.3), param_grid=xgb_params, cv=5)
+#xgb_grid.fit(X_train, y_train)
+#best_xgb = xgb_grid.best_estimator_
+#print("Best parameters for XGBoost:", xgb_grid.best_params_)
+#compute_metrics_and_plot(best_xgb, X_test, y_test, "Tuned XGBoost","XGB")
+
 
 
 

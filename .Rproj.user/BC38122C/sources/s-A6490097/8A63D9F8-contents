@@ -14,8 +14,17 @@ To improve the performance of the models and increase the accuracy measures, we 
 For the Logistic Regression 5-Fold CV, the accuracies are [0.83544304 0.70886076 0.74358974 0.82051282 0.82051282] with a Mean Accuracy of 0.7857838364167478. For Random Forest 5-Fold CV, the accuracies are [0.7721519  0.6835443  0.79487179 0.80769231 0.82051282] with a Mean Accuracy of 0.7757546251217138. For GBDT 5-Fold CV, the Accuracies are [0.83544304 0.70886076 0.4358974 0.82051282 0.82051282] with a Mean Accuracy of 0.7857838364167478. The KNN 5-Fold CV Accuracies are [0.73417722 0.67088608 0.70512821 0.73076923 0.73076923] with a Mean Accuracy of 0.7143459915611815. The XGBoost 5-Fold CV Accuracies are [0.74683544 0.73417722 0.79487179 0.84615385 0.84615385]
 with a Mean Accuracy of 0.7936384290814671.
 
-Then we use the GridSearchCV algorithm to find the best hyperparameters and then use cross validation to evaluate which is the best model. Here are the resulting metrics for the best model, with the parameters decided by GridSearchCV. The Tuned Logistic Regression Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, F1-score of 0.6190, and Best parameters for Logistic Regression: {'C': 0.1, 'penalty': 'l2'}. The Tuned Random Forest Metrics are Accuracy of 0.7722, Precision of 0.6667, Recall of 0.5600, F1-score of 0.6087, and Best parameters for Random Forest: {'max_depth': 6}. The Tuned GBDT Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, F1-score of 0.6190, and
-Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}. The Tuned KNN Metrics are Accuracy of 0.7722, Precision of 0.6842, Recall of 0.5200, F1-score of 0.5909, and Best parameters for XGBoost: {'learning_rate': 0.1, 'max_depth': 6}. For the XGBoost, it already has the optimal parameters so using GridSearchCV won't change the accuracy measures if tuned.  
+Then we use the GridSearchCV algorithm to find the best hyperparameters and then use cross validation to evaluate which is the best model. Here are the resulting metrics for the best model, with the parameters decided by GridSearchCV. The Tuned Logistic Regression Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, F1-score of 0.6190, and Best parameters for Logistic Regression: {'C': 0.1, 'penalty': 'l2'}. The Tuned Random Forest Metrics are Accuracy of 0.7722, Precision of 0.6667, Recall of 0.5600, F1-score of 0.6087, and Best parameters for Random Forest: {'max_depth': 6}. 
+Tuned KNN Metrics are Accuracy of 0.7722, Precision of 0.6842, Recall of 0.5200, F1-score of 0.5909, and Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}.The Tuned GBDT Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, and F1-score of 0.6190. For the XGBoost, it already has the optimal parameters so using GridSearchCV won't change the accuracy measures if tuned.  
+
+
+
+Best parameters for XGBoost: {'max_depth': 6, 'learning_rate=0.3'}
+Tuned XGBoost with Best Params Metrics:
+Accuracy: 0.8228
+Precision: 0.7619
+Recall: 0.6400
+F1-score: 0.6957
 
 
 

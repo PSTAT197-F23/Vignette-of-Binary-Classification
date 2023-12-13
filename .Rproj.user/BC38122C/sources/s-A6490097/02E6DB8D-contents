@@ -1,7 +1,9 @@
 ---
 title: "vignette"
-output: html_document
-date: "2023-12-05"
+output:
+  html_document: default
+  pdf_document: default
+date: '2023-12-05'
 ---
 
 ```{r setup, include=FALSE}
@@ -44,11 +46,11 @@ library(rpart.plot)
 library(discrim)
 library(klaR)
 library(plotly)
-library(ranger)
 library(xgboost)
 library(recipes)
 library(ROSE)
 library(randomForest)
+library(reticulate)
 tidymodels_prefer()
 
 # read data
@@ -56,6 +58,21 @@ db <- read_csv("data/diabetes.csv")
 
 ```
 
+
+```{r}
+db <- read_csv("data/diabetes.csv")
+#bank_df$Exited_num <- as.numeric(bank_df$Exited) # Convert Exited to numeric variable
+diabetes_numeric <- db %>% 
+  select_if(is.numeric) # Select only numeric columns
+cor_matrix <- cor(diabetes_numeric) # Compute correlation matrix
+```
+
+```{r}
+# covert survived and pclass into factors
+diabetes_numeric$Outcome <- as.factor(diabetes_numeric$Outcome)
+# sort the data frame by survived, so the yes will be on top
+db_sort <- db%>% arrange(desc(Outcome))
+```
 
 Data Partitioning
 When data partitioning, we split the data where the training set is used to train the model and the test set is used to evaluate the performance of the model. Partitions are computed at random. 
@@ -69,6 +86,14 @@ db_split <- initial_split(db, prop = 0.80,
 db_train <- training(db_split)
 db_test <- testing(db_split)
 db_fold <- vfold_cv(db_train,v=4)
+
+# Data splitting
+db$Outcome <- as.factor(db$Outcome)
+set.seed(3435)
+db_split <- initial_split(db, prop = 0.80, strata = "Outcome")
+db_train <- training(db_split)
+db_test <- testing(db_split)
+db_fold <- vfold_cv(db_train, v = 6)
 ```
 
 We will use the package recipes for the Logistic Regression, K-Nearest Neighbors, and Boosted Tree models. We will also use the tune_grid() function to do the hyperparameter tuning for these models as well. 
@@ -80,30 +105,26 @@ The step_dummy() function is used to convert all nominal variables into dummy va
 
 The prep() function is then used to prepare the recipe object, and bake() is used to apply the recipe to the training set. Finally, the group_by() and summarise() functions are used to count the number of instances of each value of the Outcome variable in the training set.
 ```{r}
-db_train$Outcome <- factor(db_train$Outcome)
-db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
-  step_dummy(all_nominal_predictors()) %>%
-  step_normalize(all_predictors()) %>% 
-  step_upsample(Outcome, over_ratio = 0.5, skip = FALSE)
 
-prep(db_recipe_demo) %>% bake(new_data = db_train) %>% 
+# Recipe without step_upsample
+db_recipe <- recipe(Outcome ~ ., data = db_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors())
+
+# Prepare the recipe
+prep(db_recipe)%>% bake(new_data = db_train) %>% 
   group_by(Outcome) %>% 
   summarise(count = n())
 
-db_recipe <- recipe(Outcome ~ ., data = db_train ) %>%
-  step_dummy(all_nominal_predictors()) %>%
-  step_normalize(all_predictors()) %>% 
-  step_upsample(Outcome, over_ratio = 1)
-
 ```
-
-
 
 Binary Classification Algorithm #1 
 Logistic Regression
 
 We will use the logistic_reg() function to generate the specification of the logistic regression model before fitting.
 ```{r}
+db_train$Outcome <- factor(db_train$Outcome)
+
 # Logistic regression
 log_reg <- logistic_reg() %>% 
   set_engine("glm") %>% 
@@ -118,6 +139,7 @@ db_tune_reg <- tune_grid(
   object = db_log_wflow, 
   resamples = db_fold
 )
+
 ```
 
 
@@ -129,6 +151,8 @@ log_fit <- fit(db_log_wflow, db_train)
 
 
 ```{r}
+library(pROC)
+
 # Extract predictions
 log_preds <- augment(log_fit, new_data = db_train)
 
@@ -153,6 +177,8 @@ show_best(db_tune_reg, n = 1)
 
 Accuracy Measures
 ```{r}
+library(pROC)
+
 # Extract predictions
 log_preds <- augment(log_fit, new_data = db_train)
 
@@ -164,6 +190,8 @@ log_conf_matrix <- conf_mat(log_predictions, truth = Outcome, estimate = .pred_c
 
 We will then use the predictions and the observed classes to create a Confusion Matrix table.
 ```{r}
+library(pROC)
+
 # Calculate ROC AUC directly using pROC
 roc_curve <- roc(log_preds$Outcome, log_preds$.pred_0)
 roc_auc_value <- auc(roc_curve)
@@ -184,8 +212,6 @@ show_best(db_tune_reg, n = 1)
 
 
 
-
-
 Binary Classification Algorithm #2
 K-Nearest Neighbors
 
@@ -202,7 +228,6 @@ prep(db_recipe)%>% bake(new_data = db_train) %>%
   summarise(count = n())
 
  
-
 # Define the k-NN model
 knn_model <- nearest_neighbor(neighbors = tune()) %>% 
   set_engine("kknn") %>% 
@@ -235,6 +260,8 @@ best_knn_db <- select_best(
 
 We will then use the predictions and observed classes to create a Confusion Matrix table.
 ```{r}
+library(pROC)
+
 best_knn_wf <- finalize_workflow(db_knn_wflow, best_knn_db)
 knn_fit <- fit(best_knn_wf, data = db_train)
 
@@ -314,6 +341,11 @@ bt_mode_fit %>% extract_fit_parsnip() %>%
 
 Compute the accuracy measures and create a confusion matrix 
 ```{r}
+bt_predictions <- augment(bt_mode_fit, new_data = db_test)
+bt_roc_curve <- roc(bt_predictions$Outcome, bt_predictions$.pred_0)
+bt_auc_value <- auc(bt_roc_curve)
+bt_conf_matrix <- conf_mat(bt_predictions, truth = Outcome, estimate = .pred_class)
+
 print(paste("Boosted Trees AUC:", bt_auc_value))
 print("Boosted Trees Confusion Matrix:")
 print(bt_conf_matrix)
@@ -324,7 +356,25 @@ Next we will use Python to create the models for the Random Forest, Gradient Boo
 
 In order to run python code blocks in R we will use the package called reticulate.
 ```{r}
+
+# Load the reticulate library
 library(reticulate)
+
+# Create a new Conda environment named "myenv" with Python 3.12
+conda_create("myenv", python_version = "3.12")
+
+# Activate the Conda environment
+use_condaenv("myenv", conda = "auto")
+
+# Verify that the correct Python version is being used
+#py_config()
+
+# Install pandas in the Conda environment
+reticulate::conda_install(envname = "myenv", packages = c("pandas"))
+
+# Check if pandas is now available
+reticulate::py_module_available("pandas")
+
 ```
 
 

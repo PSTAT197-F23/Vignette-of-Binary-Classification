@@ -17,9 +17,9 @@ Activity: Creating different models using binary classification algorithms
 
 We will fit multiple models and compute basic classification accuracy measures. 
 
-Open a new RScript and copy-paste the chunk below to load the data
+Prerequisites
+First we will start the setup by loading the required packages and data.
 ```{r}
-
 # load packages
 library(readr)
 library(vip)
@@ -58,6 +58,8 @@ db <- read_csv("data/diabetes.csv")
 
 
 Data Partitioning
+When data partitioning, we split the data where the training set is used to train the model and the test set is used to evaluate the performance of the model. Partitions are computed at random. 
+
 First we will do cross-validation and data splitting.  
 We then partition the diabetes data into training and test sets.
 ```{r}
@@ -69,6 +71,7 @@ db_test <- testing(db_split)
 db_fold <- vfold_cv(db_train,v=4)
 ```
 
+# Recipe...
 ```{r}
 db_train$Outcome <- factor(db_train$Outcome)
 db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
@@ -79,6 +82,12 @@ db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
 prep(db_recipe_demo) %>% bake(new_data = db_train) %>% 
   group_by(Outcome) %>% 
   summarise(count = n())
+
+db_recipe <- recipe(Outcome ~ ., data = db_train ) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors()) %>% 
+  step_upsample(Outcome, over_ratio = 1)
+
 ```
 
 
@@ -138,9 +147,13 @@ Accuracy Measures
 ```{r}
 # Extract predictions
 log_preds <- augment(log_fit, new_data = db_train)
+
+log_predictions <- augment(log_fit, new_data = db_test)
+log_accuracy <- accuracy(log_predictions, truth = Outcome, estimate = .pred_class)
+log_conf_matrix <- conf_mat(log_predictions, truth = Outcome, estimate = .pred_class)
 ```
 
-Compute accuracy, precision, recall, F1 score
+We will then use the predictions and the observed classes to create a Confusion Matrix table.
 ```{r}
 # Calculate ROC AUC directly using pROC
 roc_curve <- roc(log_preds$Outcome, log_preds$.pred_0)
@@ -218,6 +231,8 @@ best_knn_db <- select_best(
 
 ```
 
+
+We will then use the predictions and observed classes to create a Confusion Matrix table.
 ```{r}
 best_knn_wf <- finalize_workflow(db_knn_wflow, best_knn_db)
 knn_fit <- fit(best_knn_wf, data = db_train)
@@ -277,5 +292,39 @@ tune_bt_class <- tune_grid(
 )
 save(tune_bt_class, file = "tune_bt_class.rda")
 ```
+
+```{r}
+load("tune_bt_class.rda")
+autoplot(tune_bt_class) + theme_minimal()
+```
+
+```{r}
+show_best(tune_bt_class, n = 1)
+```
+
+```{r}
+best_bt_class <- select_best(tune_bt_class)
+```
+
+```{r}
+bt_mode_fit <- finalize_workflow(bt_class_wf, best_bt_class)
+bt_mode_fit <- fit(bt_mode_fit, db_train)
+
+bt_mode_fit %>% extract_fit_parsnip() %>% 
+  vip() +
+  theme_minimal()
+
+```
+
+Compute the accuracy measures and create a confusion matrix 
+```{r}
+print(paste("Boosted Trees AUC:", bt_auc_value))
+print("Boosted Trees Confusion Matrix:")
+print(bt_conf_matrix)
+```
+
+
+
+
 
 

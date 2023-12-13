@@ -238,11 +238,41 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 autoplot(db_tune_knn) + theme_minimal()
 ```
 
+
+
 Binary Classification Algorithm #4
 XGBoost
 
 
 Binary Classification Algorithm #5
 Boosted Tree Model
+```{r}
+bt_class_spec <- boost_tree(mtry = tune(), 
+                           trees = tune(), 
+                           learn_rate = tune()) %>%
+  set_engine("xgboost") %>% 
+  set_mode("classification")
+
+bt_class_wf <- workflow() %>% 
+  add_model(bt_class_spec) %>% 
+  add_recipe(db_recipe)
+```
+
+```{r}
+bt_grid <- grid_regular(mtry(range = c(1, 6)), 
+                        trees(range = c(200, 600)),
+                        learn_rate(range = c(-10, -1)),
+                        levels = 5)
+bt_grid
+```
+
+```{r eval=FALSE}
+tune_bt_class <- tune_grid(
+  bt_class_wf,
+  resamples = db_fold,
+  grid = bt_grid
+)
+save(tune_bt_class, file = "tune_bt_class.rda")
+```
 
 

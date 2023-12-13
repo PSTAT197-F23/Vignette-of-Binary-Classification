@@ -15,37 +15,29 @@ For the Logistic Regression 5-Fold CV, the accuracies are [0.83544304 0.70886076
 with a Mean Accuracy of 0.7936384290814671.
 
 Then we use the GridSearchCV algorithm to find the best hyperparameters and then use cross validation to evaluate which is the best model. Here are the resulting metrics for the best model, with the parameters decided by GridSearchCV. The Tuned Logistic Regression Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, F1-score of 0.6190, and Best parameters for Logistic Regression: {'C': 0.1, 'penalty': 'l2'}. The Tuned Random Forest Metrics are Accuracy of 0.7722, Precision of 0.6667, Recall of 0.5600, F1-score of 0.6087, and Best parameters for Random Forest: {'max_depth': 6}. 
-Tuned KNN Metrics are Accuracy of 0.7722, Precision of 0.6842, Recall of 0.5200, F1-score of 0.5909, and Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}.The Tuned GBDT Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, and F1-score of 0.6190. For the XGBoost, it already has the optimal parameters so using GridSearchCV won't change the accuracy measures if tuned.  
+Tuned KNN Metrics are Accuracy of 0.7722, Precision of 0.6842, Recall of 0.5200, F1-score of 0.5909, and Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}.The Tuned GBDT Metrics are Accuracy of 0.7975, Precision of 0.7647, Recall of 0.5200, and F1-score of 0.6190. The Tuned XGBoost with Best Params Metrics are Accuracy of 0.8228, Precision of 0.7619, Recall of 0.6400, F1-score of 0.6957, with the Best parameters for XGBoost: {'max_depth': 6, 'learning_rate=0.3'}.
 
-
-
-Best parameters for XGBoost: {'max_depth': 6, 'learning_rate=0.3'}
-Tuned XGBoost with Best Params Metrics:
-Accuracy: 0.8228
-Precision: 0.7619
-Recall: 0.6400
-F1-score: 0.6957
-
-
-
-
+After comparing the accuracy measures of the different models, it appears that this Tuned XGBoost is the most optimal classifier for the diabetes dataset.
 
 
 Repository contents:
-In our root directory we have a Data folder, a Scripts folder, an IMG folder, a Vignette RMarkdown file, a Vignette HTML file, and the README.md file. 
+In our root directory we have a Data folder, a Scripts folder, an IMG folder, a Vignette-Part1 RMarkdown file, a Vignette-Part2 HTML file, and the README.md file. 
 
 In the Data folder, we have the patients' data with the 8 medical predictors and the Outcome column, and we processed the data so that any patient with missing information was removed. 
 
-In the Scripts folder, we have the drafts of the code for both in R and in Python. We also have vignette-script.R which is a script with line annotations that replicates all results shown in the primary vignette document end-to-end.
+In the Scripts folder, we have the drafts of the code for both in R and in Python. We also have vignette-script.R which is a script with line annotations that replicates all results shown in the primary vignette document end-to-end. The Python code and functions are also in this folder.
+
+In the results folder, we have the accuracy, precision, recall, and F1 score measures for the different models we used. 
 
 
-In the IMG folder, we provided ROC curves graphs in order to visually show the performance of the classification models.
+In the IMG folder, we provided ROC curves graphs in order to visually show the performance of the classification models, and Confusion Matrix tables. 
 
 
 The Vignette RMarkdown and HTML files are the primary Vignette document where we teach the Binary Classification method and explain how to use the different algorithms with step-by-step explanations. 
 
 
 Reference list:
-1. 
-2. 
+1. [boosted tree] (https://search.r-project.org/CRAN/refmans/parsnip/html/boost_tree.html)
+2. [k-nearest neighbors] (https://www.datacamp.com/tutorial/k-nearest-neighbors-knn-classification-with-r-tutorial)
+3. 
 

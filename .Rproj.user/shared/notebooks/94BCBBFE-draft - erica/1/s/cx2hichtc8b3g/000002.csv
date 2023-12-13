@@ -1,0 +1,4 @@
+"0","# Plot the distribution of customer ages using a histogram"
+"0","ggplot(db, aes(x = Age)) +"
+"0","  geom_histogram(binwidth = 5, color = ""black"", fill = ""blue"") +"
+"0","  labs(title = ""Distribution of Patient Ages"", x = ""Age"", y = ""Age"")"

@@ -1,0 +1,3 @@
+"0","db %>% "
+"0","  group_by(Outcome) %>% "
+"0","  summarise(prop = n()/(dim(db)[1]))"

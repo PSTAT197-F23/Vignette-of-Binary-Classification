@@ -39,5 +39,6 @@ The Vignette RMarkdown and HTML files are the primary Vignette document where we
 Reference list:
 1. [boosted tree] (https://search.r-project.org/CRAN/refmans/parsnip/html/boost_tree.html)
 2. [k-nearest neighbors] (https://www.datacamp.com/tutorial/k-nearest-neighbors-knn-classification-with-r-tutorial)
-3. 
+3. [XGBoost] (https://xgboost.readthedocs.io/en/stable/get_started.html)
+4. [GradientBoostingClassifier] (https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html)
 

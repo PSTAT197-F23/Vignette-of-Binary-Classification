@@ -1,7 +1,7 @@
-Vignette on implementing Binary Classification using patients' medical data in order to classify/predict if a patient has diabetes; created as a class project for PSTAT197A in Fall 2023.
+Vignette on implementing Binary Classification using patients' medical data in order to classify/predict if a patient has diabetes; Group 12 created as a class project for PSTAT197A in Fall 2023.
 
 Contributors:
-Erica Chen, Chris Straw, and Claire Lee
+Group 12: Erica Chen, Chris Straw, and Claire Lee
 
 Vignette abstract:
 For our vignette class project, we decided to choose the topic Nonlinear Binary Classification, and specifically cover the binary classification algorithms: Logisitc Regression, Random Forest, Boosted Tree Model, K-Nearest Neighbors and XGBoost. Binary Classification is a method in machine learning where we can classify an observation to be under one of the two class labels based on predictors of the given data. The classes are generally labeled as 0 and 1, but can also use the labels: True and False, or positive and negative. 

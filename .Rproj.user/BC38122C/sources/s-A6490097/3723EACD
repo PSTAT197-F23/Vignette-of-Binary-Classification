@@ -1,17 +1,19 @@
 {
-    "id": "37C9CC18",
+    "id": "3723EACD",
     "path": "~/Documents/GitHub/197a-Vignette-Group12/scripts/python/Chris_Pt3.py",
     "project_path": "scripts/python/Chris_Pt3.py",
     "type": "python",
-    "hash": "488026193",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1702494639842.0,
+    "created": 1702498897992.0,
     "source_on_save": false,
     "relative_order": 4,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "96,39",
+        "scrollLine": "81"
     },
     "folds": "",
     "lastKnownWriteTime": 1702491682,

@@ -1,0 +1,5 @@
+"0","reticulate::repl_python()"
+"0","import pandas as pd"
+"2","Error in utils::askYesNo(sprintf(""Would you like to create a default python environment for the %s package?"",  : 
+  Unrecognized response “import pandas as pd”
+"

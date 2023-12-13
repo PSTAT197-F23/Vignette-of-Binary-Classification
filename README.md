@@ -4,7 +4,7 @@ Contributors:
 Group 12: Erica Chen, Chris Straw, and Claire Lee
 
 Vignette abstract:
-For our vignette class project, we decided to choose the topic Nonlinear Binary Classification, and specifically cover the binary classification algorithms: Logisitc Regression, Random Forest, Boosted Tree Model, K-Nearest Neighbors and XGBoost. Binary Classification is a method in machine learning where we can classify an observation to be under one of the two class labels based on predictors of the given data. The classes are generally labeled as 0 and 1, but can also use the labels: True and False, or positive and negative. 
+For our vignette class project, we decided to choose the topic Nonlinear Binary Classification, and specifically cover the binary classification algorithms: Logisitc Regression, Random Forest, Boosted Tree Model, K-Nearest Neighbors, Gradient Boosting Decision Trees, and XGBoost. Binary Classification is a method in machine learning where we can classify an observation to be under one of the two class labels based on predictors of the given data. The classes are generally labeled as 0 and 1, but can also use the labels: True and False, or positive and negative. 
 
 The example data we used to carry out these different binary classification algorithms sourced from the National Institute of Diabetes and Digestive Kidney Disease. This dataset is patients' data of females at least twenty one years old and of Pima Indian heritage. There are eight independent variables: Pregnancies, Glucose Concentration, Blood Pressure, Skin Thickness, Insulin Levels, BMI (Body Mass Index), Diabetes Pedigree Function, and Age. The response variable is Outcome where 1 means Yes diabetes and 0 is No diabetes. Our primary objective is to develop a binary classification model that accurately predicts whether a female of Pima Indian heritage who is at least 21 years old has diabetes or not. 
 
@@ -16,11 +16,11 @@ In our root directory we have a Data folder, a Scripts folder, an IMG folder, a 
 
 In the Data folder, we have the patients' data with the 8 medical predictors and the Outcome column, and we processed the data so that any patient with missing information was removed. 
 
-In the Scripts folder...
-Line annotations...
+In the Scripts folder, we have the drafts of the code for both in R and in Python. We also have vignette-script.R which is a script with line annotations that replicates all results shown in the primary vignette document end-to-end.
 
 
-In the IMG folder...
+In the IMG folder, we provided ROC curves graphs in order to visually show the performance of the classification models.
+
 
 The Vignette RMarkdown and HTML files are the primary Vignette document where we teach the Binary Classification method and explain how to use the different algorithms with step-by-step explanations. 
 

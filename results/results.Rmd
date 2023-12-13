@@ -87,6 +87,17 @@ Recall: 0.5200
 F1-score: 0.5909
 Best parameters for XGBoost: {'learning_rate': 0.1, 'max_depth': 6}
 
+
+
+Gradient Boosting Decision Tree Metrics:
+Accuracy: 0.8101
+Precision: 0.7273
+Recall: 0.6400
+F1-score: 0.6809
+Best parameters for XGBoost: learning_rate=0.01, lambda=0.3
+
+
+
 XGBoost GridSearch CV:
 Accuracy: 0.8101
 Precision: 0.7273

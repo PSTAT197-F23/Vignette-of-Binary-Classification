@@ -18,7 +18,32 @@ Open a new RScript and copy-paste the chunk below to load the data
 ```{r}
 
 # load packages
-
+library(readr)
+library(vip)
+library(naniar)
+library(tidymodels)
+library(ISLR)
+library(ISLR2)
+library(tidyverse)
+library(glmnet)
+library(modeldata)
+library(ggthemes)
+library(janitor)
+library(kableExtra)
+library(yardstick)
+library(kknn)
+library(corrplot)
+library(themis)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(rpart.plot)
+library(discrim)
+library(klaR)
+library(plotly)
+library(ranger)
+library(xgboost)
+tidymodels_prefer()
 
 # read data
 db <- read_csv("data/diabetes.csv")
@@ -26,15 +51,35 @@ db <- read_csv("data/diabetes.csv")
 ```
 
 
+Data Partitioning
+First we will do cross-validation and data splitting.  
+We then partition the diabetes data into training and test sets.
+```{r}
+set.seed(3435)
+db_split <- initial_split(db, prop = 0.80,
+                               strata = "Outcome")
+db_train <- training(db_split)
+db_test <- testing(db_split)
+db_fold <- vfold_cv(db_train,v=4)
+```
+
+```{r}
+db_train$Outcome <- factor(db_train$Outcome)
+db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors()) %>% 
+  step_upsample(Outcome, over_ratio = 0.5, skip = FALSE)
+
+prep(db_recipe_demo) %>% bake(new_data = db_train) %>% 
+  group_by(Outcome) %>% 
+  summarise(count = n())
+```
+
+
+
 Binary Classification Algorithm #1 
 
-Data Partitioning
 
-
-Partition the diabetes data into training and test sets
-```{r}
-
-```
 
 
 Model Fitting

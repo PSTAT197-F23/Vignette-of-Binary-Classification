@@ -21,7 +21,7 @@ After comparing the accuracy measures of the different models, it appears that t
 
 
 Repository contents:
-In our root directory we have a Data folder, a Scripts folder, an IMG folder, a Vignette-Part1 RMarkdown file, a Vignette-Part2 HTML file, and the README.md file. 
+In our root directory we have a Data folder, a Scripts folder, an IMG folder, a Results folder, a Vignette-Part1 RMarkdown file, a Vignette-Part1 HTML and PDF file, and the README.md file. 
 
 In the Data folder, we have the patients' data with the 8 medical predictors and the Outcome column, and we processed the data so that any patient with missing information was removed. 
 

@@ -1,0 +1,6 @@
+"0","set.seed(3435)"
+"0","db_split <- initial_split(db, prop = 0.80,"
+"0","                               strata = ""Outcome"")"
+"0","db_train <- training(db_split)"
+"0","db_test <- testing(db_split)"
+"0","db_fold <- vfold_cv(db_train,v=4)"

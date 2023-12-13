@@ -1,0 +1,5 @@
+"0","# covert survived and pclass into factors"
+"0","diabetes_numeric$Outcome <- as.factor(diabetes_numeric$Outcome)"
+"0","# sort the data frame by survived, so the yes will be on top"
+"0","db_sort <- db%>% arrange(desc(Outcome))"
+"0","head(db_sort)"

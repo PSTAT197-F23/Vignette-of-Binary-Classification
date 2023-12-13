@@ -15,7 +15,7 @@ For the purpose of this vignette, we will use data from the National Institute o
 
 Activity: Creating different models using binary classification algorithms 
 
-We will fit multiple models and compute basic classification accuracy measures. 
+We will fit multiple models and compute basic classification accuracy measures in order to compare the models and see which one should be the final model chosen. 
 
 Prerequisites
 First we will start the setup by loading the required packages and data.
@@ -153,6 +153,7 @@ log_accuracy <- accuracy(log_predictions, truth = Outcome, estimate = .pred_clas
 log_conf_matrix <- conf_mat(log_predictions, truth = Outcome, estimate = .pred_class)
 ```
 
+
 We will then use the predictions and the observed classes to create a Confusion Matrix table.
 ```{r}
 # Calculate ROC AUC directly using pROC
@@ -172,6 +173,7 @@ conf_matrix %>% autoplot(type = 'heatmap') +
 show_best(db_tune_reg, n = 1)
 
 ```
+
 
 
 Binary Classification Algorithm #2
@@ -260,6 +262,7 @@ autoplot(db_tune_knn) + theme_minimal()
 
 Binary Classification Algorithm #4
 XGBoost
+...
 
 
 Binary Classification Algorithm #5

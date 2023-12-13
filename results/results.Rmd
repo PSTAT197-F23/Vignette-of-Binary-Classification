@@ -24,12 +24,6 @@ Precision: 0.7083
 Recall: 0.6296
 F1-score: 0.6667
 
-GBDT Metrics:
-Accuracy: 0.7468
-Precision: 0.6400
-Recall: 0.5926
-F1-score: 0.6154
-
 KNN Metrics:
 Accuracy: 0.7089
 Precision: 0.5769

@@ -1,0 +1,109 @@
+---
+title: "results"
+output: html_document
+date: "2023-12-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Metrics using various methods
+
+### Default Hyperparameters
+
+Logistic Regression Metrics:
+Accuracy: 0.7722
+Precision: 0.6957
+Recall: 0.5926
+F1-score: 0.6400
+
+Random Forest Metrics:
+Accuracy: 0.7848
+Precision: 0.7083
+Recall: 0.6296
+F1-score: 0.6667
+
+GBDT Metrics:
+Accuracy: 0.7468
+Precision: 0.6400
+Recall: 0.5926
+F1-score: 0.6154
+
+KNN Metrics:
+Accuracy: 0.7089
+Precision: 0.5769
+Recall: 0.5556
+F1-score: 0.5660
+
+XGBoost Metrics:
+Accuracy: 0.7468
+Precision: 0.6400
+Recall: 0.5926
+F1-score: 0.6154
+
+### Accuracy from 5-fold Cross Validation
+
+The metrics from running the model just on split data is not the most accurate. Therefore, we use k-fold cross validation to gain a more accurate metrics from the models obtained in part 1.
+
+Logistic Regression 5-Fold CV Accuracies: [0.83544304 0.70886076 0.74358974 0.82051282 0.82051282]
+Mean Accuracy: 0.7857838364167478
+
+Random Forest 5-Fold CV Accuracies: [0.7721519  0.6835443  0.79487179 0.80769231 0.82051282]
+Mean Accuracy: 0.7757546251217138
+
+GBDT 5-Fold CV Accuracies: [0.83544304 0.70886076 0.4358974 0.82051282 0.82051282]
+Mean Accuracy: 0.7857838364167478
+
+KNN 5-Fold CV Accuracies: [0.73417722 0.67088608 0.70512821 0.73076923 0.73076923]
+Mean Accuracy: 0.7143459915611815
+
+XGBoost 5-Fold CV Accuracies: [0.74683544 0.73417722 0.79487179 0.84615385 0.84615385]
+Mean Accuracy: 0.7936384290814671
+
+### Using GridSearch Cross Validation of models
+
+GridSearchCV is an algorithm that iteratively changes the hyperparameters of a model, then uses cross validation to evaluate which is the best model. Here are the resulting metrics for the best model, with the parameters decided by GridSearchCV
+
+Tuned Logistic Regression Metrics:
+Accuracy: 0.7975
+Precision: 0.7647
+Recall: 0.5200
+F1-score: 0.6190
+Best parameters for Logistic Regression: {'C': 0.1, 'penalty': 'l2'}
+
+Tuned Random Forest Metrics:
+Accuracy: 0.7722
+Precision: 0.6667
+Recall: 0.5600
+F1-score: 0.6087
+Best parameters for Random Forest: {'max_depth': 6}
+
+Tuned GBDT Metrics:
+Accuracy: 0.7975
+Precision: 0.7647
+Recall: 0.5200
+F1-score: 0.6190
+Best parameters for KNN: {'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'uniform'}
+
+Tuned KNN Metrics:
+Accuracy: 0.7722
+Precision: 0.6842
+Recall: 0.5200
+F1-score: 0.5909
+Best parameters for XGBoost: {'learning_rate': 0.1, 'max_depth': 6}
+
+XGBoost GridSearch CV:
+Accuracy: 0.8101
+Precision: 0.7273
+Recall: 0.6400
+F1-score: 0.6809
+Best parameters for XGBoost: learning_rate=0.01, lambda=0.3
+
+It appears that XGBoost with the listed parameters above is the most optimal classifier for the diabetes dataset.
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

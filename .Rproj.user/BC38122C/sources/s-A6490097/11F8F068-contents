@@ -8,6 +8,7 @@ diabetes
 # Suppress warning messages
 suppressWarnings({
 library(readr)
+library(pROC)
 library(vip)
 library(naniar)
 library(tidymodels)
@@ -30,7 +31,6 @@ library(rpart.plot)
 library(discrim)
 library(klaR)
 library(plotly)
-library(ranger)
 library(xgboost)
 tidymodels_prefer()
 })
@@ -38,7 +38,6 @@ tidymodels_prefer()
 
 ```{r}
 db <- read.csv("~/Downloads/diabetes.csv")
-db
 ```
 
 ```{r}
@@ -149,26 +148,6 @@ db_fold <- vfold_cv(db_train,v=4)
 
 ## Recipe
 ```{r}
-db_train$Outcome <- factor(db_train$Outcome)
-db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
-  step_dummy(all_nominal_predictors()) %>%
-  step_normalize(all_predictors()) %>% 
-  step_upsample(Outcome, over_ratio = 0.5, skip = FALSE)
-
-prep(db_recipe_demo) %>% bake(new_data = db_train) %>% 
-  group_by(Outcome) %>% 
-  summarise(count = n())
-```
-
-```{r}
-db_recipe <- recipe(Outcome ~ ., data = db_train ) %>%
-  step_dummy(all_nominal_predictors()) %>%
-  step_normalize(all_predictors()) %>% 
-  step_upsample(Outcome, over_ratio = 1)
-```
-
-##KNN Model
-```{r}
 # Load libraries
 library(recipes)
 library(tidymodels)
@@ -194,8 +173,16 @@ prep(db_recipe)%>% bake(new_data = db_train) %>%
   group_by(Outcome) %>% 
   summarise(count = n())
 
- 
+```
+The step_dummy() function is used to convert all nominal variables into dummy variables. The step_normalize() function is used to scale all variables to have a mean of zero and standard deviation of one. 
 
+The prep() function is then used to prepare the recipe object, and bake() is used to apply the recipe to the training set. Finally, the group_by() and summarise() functions are used to count the number of instances of each value of the Outcome variable in the training set.
+
+
+
+
+#Knn
+```{r}
 # Define the k-NN model
 knn_model <- nearest_neighbor(neighbors = tune()) %>% 
   set_engine("kknn") %>% 
@@ -292,84 +279,9 @@ show_best(db_tune_reg, n = 1)
 
 ```
 ### Random Forest 
-```{r eval=FALSE}
-library(tidyverse)
-rf_class_model <- rand_forest(mtry = tune(), 
-                              trees = tune(), 
-                              min_n = tune()) %>%
-  set_engine("ranger", importance = "impurity") %>% 
-  set_mode("classification")
-
-rf_class_wf <- workflow() %>% 
-  add_model(rf_class_model) %>% 
-  add_recipe(db_recipe)
-
-param_grid <- grid_regular(
-  mtry(range = c(1, 4)),
-  trees(range = c(200, 600)),
-  min_n(range = c(10, 20)),
-  levels = 4
-)
-
-db_tune_rf <- tune_grid(
-  object = rf_class_wf, 
-  resamples = db_fold, 
-  grid = param_grid)
-
-save(bank_tune_rf, file = 'bank_tune_rf.rda')
 
 
-```
 
-```{r}
-
-library(randomForest)
-
-# Define the random forest model
-rf_class_model <- rand_forest(mtry = tune(), 
-                              trees = tune(), 
-                              min_n = tune()) %>%
-  set_engine("randomForest", importance = "impurity") %>% 
-  set_mode("classification")
-
-# Create a workflow
-rf_class_wf <- workflow() %>% 
-  add_model(rf_class_model) %>% 
-  add_recipe(db_recipe)
-
-# Define the parameter grid
-param_grid <- grid_regular(
-  mtry(range = c(1, 4)),
-  trees(range = c(200, 600)),
-  min_n(range = c(10, 20)),
-  levels = 4
-)
-
-# Tune the model
-db_tune_rf <- tune_grid(
-  object = rf_class_wf, 
-  resamples = db_fold, 
-  grid = param_grid
-)
-
-# Save the result
-save(db_tune_rf, file = 'db_tune_rf.rda')
-
-```
-
-
-```{r}
-load("db_tune_rf.rda")
-```
-
-```{r}
-autoplot(db_tune_rf) + theme_minimal()
-```
-
-```{r}
-show_best(db_tune_rf, n = 1)
-
-```
 ##Boosted Tree Model
 ```{r}
 bt_class_spec <- boost_tree(mtry = tune(), 
@@ -455,13 +367,12 @@ text(0.7, 0.2, paste("AUC =", round(roc_auc_value, 3)), col = "blue", cex = 1.2)
 library(pROC)
 library(yardstick)
 
-# Assuming knn_fit, log_fit, and bt_mode_fit are your fitted models
-# Replace "Outcome" and ".pred_0" with your actual column names
-
 # KNN
 knn_predictions <- augment(knn_fit, new_data = db_test)
 knn_roc_curve <- roc(knn_predictions$Outcome, knn_predictions$.pred_0)
 knn_auc_value <- auc(knn_roc_curve)
+# Add AUC value to the plot
+
 
 # Logistic Regression
 log_predictions <- augment(log_fit, new_data = db_test)
@@ -473,6 +384,7 @@ bt_predictions <- augment(bt_mode_fit, new_data = db_test)
 bt_roc_curve <- roc(bt_predictions$Outcome, bt_predictions$.pred_0)
 bt_auc_value <- auc(bt_roc_curve)
 bt_conf_matrix <- conf_mat(bt_predictions, truth = Outcome, estimate = .pred_class)
+# Add AUC value to the plot
 
 # Print and plot results
 print(paste("KNN AUC:", knn_auc_value))
@@ -486,7 +398,9 @@ print(bt_conf_matrix)
 
 # Plot ROC curves
 plot(knn_roc_curve, main = "KNN ROC Curve", col = "blue", lwd = 2)
+text(0.7, 0.2, paste("AUC =", round(knn_auc_value, 3)), col = "blue", cex = 1.2)
 plot(bt_roc_curve, main = "Boosted Trees ROC Curve", col = "green", lwd = 2)
+text(0.7, 0.2, paste("AUC =", round(bt_auc_value, 3)), col = "blue", cex = 1.2)
 
 ```
 
@@ -515,13 +429,6 @@ print(conf_mat_result)
 
 ```
 
-```{r}
-final_final_fit <- fit(bank_rf_fit , data = bank_test)
-augment(final_final_fit, new_data = bank_test) %>%
-  roc_auc(truth = Exited, estimate = .pred_0)
-augment(final_final_fit, new_data = bank_test) %>%
-  conf_mat(truth = Exited, estimate = .pred_class)%>%autoplot(type='heatmap')
-```
 
 
 ```{r}
@@ -607,6 +514,26 @@ augment(final_final_fit, new_data = bank_test) %>%
 ```{r}
 
 ```
+
 ```{r}
 
+```
+
+```{r}
+db_train$Outcome <- factor(db_train$Outcome)
+db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors()) %>% 
+  step_upsample(Outcome, over_ratio = 0.5, skip = FALSE)
+
+prep(db_recipe_demo) %>% bake(new_data = db_train) %>% 
+  group_by(Outcome) %>% 
+  summarise(count = n())
+```
+
+```{r}
+db_recipe <- recipe(Outcome ~ ., data = db_train ) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors()) %>% 
+  step_upsample(Outcome, over_ratio = 1)
 ```

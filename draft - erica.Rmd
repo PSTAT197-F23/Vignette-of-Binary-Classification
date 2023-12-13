@@ -154,7 +154,6 @@ library(recipes)
 library(tidymodels)
 library(ROSE)
 
-# Assuming df is your data frame or tibble
 db$Outcome <- as.factor(db$Outcome)
 
 # Data splitting
@@ -234,6 +233,7 @@ conf_matrix %>% autoplot(type = 'heatmap') +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ```
+
 ```{r}
 autoplot(db_tune_knn) + theme_minimal()
 ```

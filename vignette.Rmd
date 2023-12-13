@@ -43,6 +43,9 @@ library(klaR)
 library(plotly)
 library(ranger)
 library(xgboost)
+library(recipes)
+library(ROSE)
+library(randomForest)
 tidymodels_prefer()
 
 # read data
@@ -78,6 +81,7 @@ prep(db_recipe_demo) %>% bake(new_data = db_train) %>%
 
 
 Binary Classification Algorithm #1 
+Logistic Regression
 
 ```{r}
 # Logistic regression
@@ -155,6 +159,11 @@ show_best(db_tune_reg, n = 1)
 
 
 Binary Classification Algorithm #2
+Random Forest
+
+```{r}
+
+```
 
 
 
@@ -162,9 +171,78 @@ Binary Classification Algorithm #2
 
 
 Binary Classification Algorithm #3
+K-Nearest Neighbors
+
+```{r}
+# Recipe without step_upsample
+db_recipe <- recipe(Outcome ~ ., data = db_train) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_predictors())
+
+# Prepare the recipe
+prep(db_recipe)%>% bake(new_data = db_train) %>% 
+  group_by(Outcome) %>% 
+  summarise(count = n())
+
+ 
+
+# Define the k-NN model
+knn_model <- nearest_neighbor(neighbors = tune()) %>% 
+  set_engine("kknn") %>% 
+  set_mode("classification")
+
+# Create a workflow with the recipe and model
+db_knn_wflow <- workflow() %>% 
+  add_recipe(db_recipe) %>%  # Include the recipe
+  add_model(knn_model)      # Include the model
+
+# Grid for tuning
+neighbors_grid <- grid_regular(neighbors(range = c(1, 10)), levels = 10)
+
+# Tune the model
+db_tune_knn <- tune_grid(
+  object = db_knn_wflow, 
+  resamples = db_fold, 
+  grid = neighbors_grid
+)
+
+# Select the best model
+best_knn_db <- select_best(
+  db_tune_knn,
+  metric = "roc_auc",
+  neighbors
+)
+
+```
+
+```{r}
+best_knn_wf <- finalize_workflow(db_knn_wflow, best_knn_db)
+knn_fit <- fit(best_knn_wf, data = db_train)
+
+# Extract predictions
+knn_preds <- augment(knn_fit, new_data = db_train)
+
+# Calculate ROC AUC directly using pROC
+roc_curve <- roc(knn_preds$Outcome, knn_preds$.pred_0)
+roc_auc_value <- auc(roc_curve)
+print(roc_auc_value)
+
+# Confusion Matrix
+conf_matrix <- knn_preds %>%
+  conf_mat(truth = Outcome, estimate = .pred_class)
+
+# Plot Confusion Matrix
+conf_matrix %>% autoplot(type = 'heatmap') +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+autoplot(db_tune_knn) + theme_minimal()
+```
+
+Binary Classification Algorithm #4
+XGBoost
 
 
-
-...
+Binary Classification Algorithm #5
+Boosted Tree Model
 
 

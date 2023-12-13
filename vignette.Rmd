@@ -21,7 +21,7 @@ Open a new RScript and copy-paste the chunk below to load the data
 
 
 # read data
-
+db <- read_csv("data/diabetes.csv")
 
 ```
 

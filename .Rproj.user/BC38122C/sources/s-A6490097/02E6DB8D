@@ -3,7 +3,7 @@
     "path": "~/Documents/GitHub/197a-Vignette-Group12/vignette.Rmd",
     "project_path": "vignette.Rmd",
     "type": "r_markdown",
-    "hash": "2964663150",
+    "hash": "1328752808",
     "contents": "",
     "dirty": false,
     "created": 1702436876074.0,
@@ -12,16 +12,16 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "366,15",
-        "scrollLine": "373",
+        "cursorPosition": "73,85",
+        "scrollLine": "74",
         "last_setup_crc32": "A6490097bb338d19"
     },
     "folds": "",
-    "lastKnownWriteTime": 1702495235,
+    "lastKnownWriteTime": 1702496585,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1702495235226,
+    "last_content_update": 1702496585118,
     "read_only": false,
     "read_only_alternatives": []
 }

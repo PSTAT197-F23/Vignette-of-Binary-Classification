@@ -71,7 +71,10 @@ db_test <- testing(db_split)
 db_fold <- vfold_cv(db_train,v=4)
 ```
 
-# Recipe...
+Here we will use the step_dummy() and prep() functions to set up the training model. 
+The step_dummy() function is used to convert all nominal variables into dummy variables. The step_normalize() function is used to scale all variables to have a mean of zero and standard deviation of one. 
+
+The prep() function is then used to prepare the recipe object, and bake() is used to apply the recipe to the training set. Finally, the group_by() and summarise() functions are used to count the number of instances of each value of the Outcome variable in the training set.
 ```{r}
 db_train$Outcome <- factor(db_train$Outcome)
 db_recipe_demo <- recipe(Outcome ~ ., data = db_train) %>%

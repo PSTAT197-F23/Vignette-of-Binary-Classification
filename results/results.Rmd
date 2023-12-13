@@ -30,6 +30,12 @@ Precision: 0.5769
 Recall: 0.5556
 F1-score: 0.5660
 
+Gradient Boosted Trees Metrics:
+Accuracy: 0.7722
+Precision: 0.7059
+Recall: 0.4800
+F1-score: 0.5714
+
 XGBoost Metrics:
 Accuracy: 0.7468
 Precision: 0.6400
@@ -59,26 +65,25 @@ Mean Accuracy: 0.7936384290814671
 
 GridSearchCV is an algorithm that iteratively changes the hyperparameters of a model, then uses cross validation to evaluate which is the best model. Here are the resulting metrics for the best model, with the parameters decided by GridSearchCV
 
-Tuned Logistic Regression Metrics:
-Accuracy: 0.7975
-Precision: 0.7647
-Recall: 0.5200
-F1-score: 0.6190
-Best parameters for Logistic Regression: {'C': 0.1, 'penalty': 'l2'}
-
-Tuned Random Forest Metrics:
+Best parameters for Random Forest: {'max_depth': 6}
+Tuned Random Forest with Best Params Metrics:
 Accuracy: 0.7722
 Precision: 0.6667
 Recall: 0.5600
 F1-score: 0.6087
-Best parameters for Random Forest: {'max_depth': 6}
 
+<<<<<<< HEAD
 
 Tuned GBDT Metrics:
+=======
+Best parameters for Gradient Boosted Trees: {'learning_rate': 0.2, 'max_depth': 3}
+Tuned Gradient Boost Trees with Best Params Metrics:
+>>>>>>> f839628dee14f9a3f4e1f5ea4521d2a1478ed80e
 Accuracy: 0.7975
 Precision: 0.7647
 Recall: 0.5200
 F1-score: 0.6190
+<<<<<<< HEAD
 
 
 Tuned KNN Metrics:
@@ -103,6 +108,15 @@ Accuracy: 0.8101
 Precision: 0.7273
 Recall: 0.6400
 F1-score: 0.6809
+=======
+
+Best parameters for XGBoost: {'max_depth': 6, 'learning_rate=0.3'}
+Tuned XGBoost with Best Params Metrics:
+Accuracy: 0.8228
+Precision: 0.7619
+Recall: 0.6400
+F1-score: 0.6957
+>>>>>>> f839628dee14f9a3f4e1f5ea4521d2a1478ed80e
 
 It appears that XGBoost with the listed parameters above is the most optimal classifier for the diabetes dataset.
 
